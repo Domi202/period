@@ -2,6 +2,7 @@
 namespace Kreemers\Period\Tests\Unit;
 
 use DateTime;
+use Kreemers\Period\Exception\EndBeforeStartException;
 use Kreemers\Period\Period;
 use PHPUnit\Framework\TestCase;
 
@@ -46,12 +47,20 @@ class PeriodTest extends TestCase
         );
     }
 
-    protected function periodToString(Period $period): string
+    /**
+     * @covers ::create
+     */
+    public function test_throwExceptionOnInvalidCreate()
     {
-        return sprintf(
-            '[Period %s | %s]',
-            $period->getStart()->format(DateTime::W3C),
-            $period->getEnd()->format(DateTime::W3C)
+        $start = new DateTime('2019-04-17 12:00');
+        $end = new DateTime('2019-04-16 12:00');
+
+        $this->expectException(EndBeforeStartException::class);
+        $this->expectExceptionCode(1555929112);
+
+        Period::create(
+            $start,
+            $end
         );
     }
 
@@ -305,6 +314,15 @@ class PeriodTest extends TestCase
                 $this->periodToString($period),
                 $this->periodToString($reference)
             )
+        );
+    }
+
+    private function periodToString(Period $period): string
+    {
+        return sprintf(
+            '[Period %s | %s]',
+            $period->getStart()->format(DateTime::W3C),
+            $period->getEnd()->format(DateTime::W3C)
         );
     }
 }
