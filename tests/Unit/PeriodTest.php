@@ -12,11 +12,12 @@ use PHPUnit\Framework\TestCase;
 class PeriodTest extends TestCase
 {
     /**
+     * @covers ::create
      * @covers ::__construct
      * @covers ::getStart
      * @covers ::getEnd
      */
-    public function test_construct()
+    public function test_create()
     {
         $start = new DateTime('2019-04-16 12:00');
         $end = new DateTime('2019-05-16 12:00');
