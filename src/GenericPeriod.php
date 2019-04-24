@@ -5,7 +5,7 @@ namespace Kreemers\Period;
 use DateTime;
 use Kreemers\Period\Exception\EndBeforeStartException;
 
-class Period
+final class GenericPeriod
 {
     /**
      * @var DateTime
@@ -49,13 +49,13 @@ class Period
         return $this->end;
     }
 
-    public function equals(Period $period): bool
+    public function equals(GenericPeriod $period): bool
     {
         return $this->getStart() == $period->getStart()
             && $this->getEnd() == $period->getEnd();
     }
 
-    public function in(Period $period): bool
+    public function in(GenericPeriod $period): bool
     {
         if ($this->getStart() >= $period->getStart()
             && $this->getStart() <= $period->getEnd()
@@ -68,7 +68,7 @@ class Period
         return false;
     }
 
-    public function encloses(Period $period): bool
+    public function encloses(GenericPeriod $period): bool
     {
         if ($this->getStart() <= $period->getStart()
             && $this->getEnd() >= $period->getEnd()
@@ -79,7 +79,7 @@ class Period
         return false;
     }
 
-    public function intersects(Period $period): bool
+    public function intersects(GenericPeriod $period): bool
     {
         if ($this->getStart() >= $period->getStart()
             && $this->getStart() <= $period->getEnd()
