@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Kreemers\Period;
 
+use DateInterval;
 use DateTime;
 use Kreemers\Period\Exception\EndBeforeStartException;
 
@@ -21,6 +22,10 @@ final class GenericPeriod implements Period
         DateTime $start,
         DateTime $end
     ) {
+        if ($start > $end) {
+            throw new EndBeforeStartException();
+        }
+
         $this->start = clone $start;
         $this->end = clone $end;
     }
@@ -29,14 +34,30 @@ final class GenericPeriod implements Period
         DateTime $start,
         DateTime $end
     ) {
-        if ($start > $end) {
-            throw new EndBeforeStartException();
-        }
-
         return new static(
             $start,
             $end
         );
+    }
+
+    public static function createDay(
+        DateTime $day
+    ) {
+        $start = (clone $day)->setTime(0, 0, 0);
+        $end = (clone $day)->setTime(23, 59, 59);
+        return new static($start, $end);
+    }
+
+    public static function createMonth(
+        DateTime $month
+    ) {
+        $start = (clone $month)->sub(
+            DateInterval::createFromDateString(((int) $month->format('d') - 1) . ' days')
+        );
+        $end = (clone $start)->add(
+            DateInterval::createFromDateString(((int) $month->format('t') - 1) . ' days')
+        )->setTime(23, 59, 59);
+        return new static($start, $end);
     }
 
     public function getStart(): DateTime

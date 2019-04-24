@@ -48,6 +48,46 @@ class GenericPeriodTest extends TestCase
     }
 
     /**
+     * @covers ::createDay
+     */
+    public function test_createDay()
+    {
+        $day = new DateTime('2019-05-04');
+
+        $subject = GenericPeriod::createDay($day);
+
+        $this->assertEquals(
+            new DateTime('2019-05-04 00:00:00'),
+            $subject->getStart()
+        );
+        $this->assertEquals(
+            new DateTime('2019-05-04 23:59:59'),
+            $subject->getEnd()
+        );
+    }
+
+    /**
+     * @covers ::createMonth
+     */
+    public function test_createMonth()
+    {
+        $month = new DateTime('2019-05-12');
+
+        $subject = GenericPeriod::createMonth($month);
+
+        $this->assertEquals(
+            new DateTime('2019-05-01 00:00:00'),
+            $subject->getStart(),
+            'Start does not match'
+        );
+        $this->assertEquals(
+            new DateTime('2019-05-31 23:59:59'),
+            $subject->getEnd(),
+            'End does not match'
+        );
+    }
+
+    /**
      * @covers ::create
      */
     public function test_throwExceptionOnInvalidCreate()
